@@ -1,10 +1,9 @@
-﻿using System;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
+using System;
 
 namespace SeleniumDotNet
 {
@@ -12,13 +11,15 @@ namespace SeleniumDotNet
     /// Summary description for MySeleniumTests
     /// </summary>
     [TestClass]
-    public class MySeleniumTests
+    public class SeleniumTest
     {
         private TestContext testContextInstance;
         private IWebDriver driver;
         private string appURL;
 
-        public MySeleniumTests()
+
+
+        public SeleniumTest()
         {
         }
 
@@ -26,11 +27,18 @@ namespace SeleniumDotNet
         [TestCategory("Chrome")]
         public void TheBingSearchTest()
         {
-            driver.Navigate().GoToUrl(appURL + "/");
-            driver.FindElement(By.Id("sb_form_q")).SendKeys("Azure Pipelines");
-            driver.FindElement(By.Id("sb_form_go")).Click();
-            driver.FindElement(By.XPath("//*[@id='b_results']/li[1]/h2/a")).Click();
-            Assert.IsTrue(driver.Title.Contains("Azure Pipelines"), "Verified title of the page");
+            try
+            {
+                driver.Navigate().GoToUrl(appURL + "/");
+                driver.FindElement(By.Id("sb_form_q")).SendKeys("Azure Pipelines");
+                driver.FindElement(By.Id("sb_form_go")).Click();
+                driver.FindElement(By.XPath("//*[@id='b_results']/li[1]/h2/a")).Click();
+                Assert.IsTrue(driver.Title.Contains("Azure Pipelines"), WriteLogToConsole("assertation successed"));
+            }
+            catch (Exception)
+            {
+                WriteLogToConsole("assertation failed");
+            }
         }
 
         /// <summary>
@@ -77,6 +85,15 @@ namespace SeleniumDotNet
         public void MyTestCleanup()
         {
             driver.Quit();
+        }
+
+        public string WriteLogToConsole(string message)
+        {
+            Console.WriteLine(".............................");
+            Console.WriteLine(message);
+            Console.WriteLine(".............................");
+
+            return message;
         }
     }
 }
